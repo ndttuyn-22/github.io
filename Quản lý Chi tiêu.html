@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Chi tiêu Cá nhân</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: #ffd700;
+        }
+
+        .logo h1 {
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+        .summary {
+            text-align: right;
+        }
+
+        .summary h2 {
+            font-weight: 500;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .total-amount {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .app-body {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            background-color: #f8f9fc;
+            border-right: 1px solid #eaeaea;
+        }
+
+        .history-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4b6cb7;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #34495e;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: #4b6cb7;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(75, 108, 183, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button i {
+            margin-right: 8px;
+        }
+
+        .transactions-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+
+        .transaction-item:hover {
+            background-color: #f8f9ff;
+        }
+
+        .transaction-date {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 4px;
+        }
+
+        .transaction-description {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .transaction-amount {
+            font-weight: 700;
+            font-size: 18px;
+            color: #e74c3c;
+        }
+
+        .no-transactions {
+            text-align: center;
+            padding: 30px;
+            color: #95a5a6;
+        }
+
+        .no-transactions i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ecf0f1;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-bar select {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #f8f9fc;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            .app-body {
+                flex-direction: column;
+            }
+            
+            .form-section {
+                border-right: none;
+                border-bottom: 1px solid #eaeaea;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-wallet"></i>
+                <h1>Quản lý Chi tiêu</h1>
+            </div>
+            <div class="summary">
+                <h2>Tổng chi tiêu</h2>
+                <div class="total-amount">0 ₫</div>
+            </div>
+        </header>
+        
+        <div class="app-body">
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-plus-circle"></i> Thêm chi tiêu mới</h2>
+                
+                <div class="input-group">
+                    <label for="expense-date"><i class="fas fa-calendar"></i> Ngày</label>
+                    <input type="date" id="expense-date">
+                </div>
+                
+                <div class="input-group">
+                    <label for="expense-description"><i class="fas fa-file-alt"></i> Nội dung chi</label>
+                    <input type="text" id="expense-description" placeholder="Ví dụ: Mua đồ ăn, Tiền điện...">
+                </div>
+                
+                <div class="input-group">
+                    <label for="expense-amount"><i class="fas fa-money-bill-wave"></i> Số tiền (₫)</label>
+                    <input type="number" id="expense-amount" placeholder="Nhập số tiền">
+                </div>
+                
+                <div class="input-group">
+                    <label for="expense-category"><i class="fas fa-tag"></i> Danh mục</label>
+                    <select id="expense-category">
+                        <option value="food">Ăn uống</option>
+                        <option value="shopping">Mua sắm</option>
+                        <option value="transport">Di chuyển</option>
+                        <option value="bills">Hóa đơn</option>
+                        <option value="entertainment">Giải trí</option>
+                        <option value="other">Khác</option>
+                    </select>
+                </div>
+                
+                <button id="add-expense">
+                    <i class="fas fa-plus"></i> Thêm chi tiêu
+                </button>
+            </div>
+            
+            <div class="history-section">
+                <div class="filter-bar">
+                    <select id="filter-month">
+                        <option value="all">Tất cả tháng</option>
+                        <option value="0">Tháng 1</option>
+                        <option value="1">Tháng 2</option>
+                        <!-- Các tháng khác -->
+                    </select>
+                    <select id="filter-category">
+                        <option value="all">Tất cả danh mục</option>
+                        <option value="food">Ăn uống</option>
+                        <option value="shopping">Mua sắm</option>
+                        <!-- Các danh mục khác -->
+                    </select>
+                </div>
+                
+                <h2 class="section-title"><i class="fas fa-history"></i> Lịch sử chi tiêu</h2>
+                
+                <div class="transactions-list">
+                    <div class="no-transactions">
+                        <i class="fas fa-receipt"></i>
+                        <p>Chưa có chi tiêu nào được ghi nhận</p>
+                    </div>
+                    <!-- Danh sách chi tiêu sẽ được thêm ở đây -->
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3>Chi tiêu hôm nay</h3>
+                        <div class="value">0 ₫</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Chi tiêu tháng này</h3>
+                        <div class="value">0 ₫</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mảng lưu trữ các khoản chi tiêu
+        let expenses = [];
+        
+        // Lấy các phần tử DOM
+        const addButton = document.getElementById('add-expense');
+        const dateInput = document.getElementById('expense-date');
+        const descriptionInput = document.getElementById('expense-description');
+        const amountInput = document.getElementById('expense-amount');
+        const categorySelect = document.getElementById('expense-category');
+        const totalAmountDisplay = document.querySelector('.total-amount');
+        const transactionsList = document.querySelector('.transactions-list');
+        const todayExpenseDisplay = document.querySelector('.stats .stat-card:first-child .value');
+        const monthExpenseDisplay = document.querySelector('.stats .stat-card:last-child .value');
+        
+        // Thiết lập ngày mặc định là hôm nay
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
+        
+        // Thêm sự kiện cho nút thêm chi tiêu
+        addButton.addEventListener('click', addExpense);
+        
+        // Hàm thêm chi tiêu mới
+        function addExpense() {
+            // Lấy giá trị từ form
+            const date = dateInput.value;
+            const description = descriptionInput.value.trim();
+            const amount = parseFloat(amountInput.value);
+            const category = categorySelect.value;
+            
+            // Kiểm tra dữ liệu hợp lệ
+            if (!description || isNaN(amount) || amount <= 0) {
+                alert('Vui lòng nhập đầy đủ thông tin và số tiền hợp lệ!');
+                return;
+            }
+            
+            // Tạo đối tượng chi tiêu mới
+            const newExpense = {
+                id: Date.now(), // ID duy nhất
+                date,
+                description,
+                amount,
+                category
+            };
+            
+            // Thêm vào mảng
+            expenses.push(newExpense);
+            
+            // Cập nhật giao diện
+            updateUI();
+            
+            // Reset form
+            descriptionInput.value = '';
+            amountInput.value = '';
+            categorySelect.value = 'food';
+        }
+        
+        // Hàm cập nhật giao diện
+        function updateUI() {
+            // Tính tổng chi tiêu
+            const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+            totalAmountDisplay.textContent = total.toLocaleString('vi-VN') + ' ₫';
+            
+            // Tính chi tiêu hôm nay
+            const today = new Date().toISOString().split('T')[0];
+            const todayExpenses = expenses.filter(expense => expense.date === today);
+            const todayTotal = todayExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            todayExpenseDisplay.textContent = todayTotal.toLocaleString('vi-VN') + ' ₫';
+            
+            // Tính chi tiêu tháng này
+            const currentMonth = new Date().getMonth();
+            const monthExpenses = expenses.filter(expense => {
+                const expenseMonth = new Date(expense.date).getMonth();
+                return expenseMonth === currentMonth;
+            });
+            const monthTotal = monthExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            monthExpenseDisplay.textContent = monthTotal.toLocaleString('vi-VN') + ' ₫';
+            
+            // Cập nhật danh sách chi tiêu
+            renderExpensesList();
+        }
+        
+        // Hàm hiển thị danh sách chi tiêu
+        function renderExpensesList() {
+            if (expenses.length === 0) {
+                transactionsList.innerHTML = `
+                    <div class="no-transactions">
+                        <i class="fas fa-receipt"></i>
+                        <p>Chưa có chi tiêu nào được ghi nhận</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sắp xếp theo ngày (mới nhất đầu tiên)
+            const sortedExpenses = [...expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            let html = '';
+            sortedExpenses.forEach(expense => {
+                const date = new Date(expense.date);
+                const formattedDate = date.toLocaleDateString('vi-VN');
+                
+                // Icon theo danh mục
+                let iconClass;
+                switch(expense.category) {
+                    case 'food':
+                        iconClass = 'fas fa-utensils';
+                        break;
+                    case 'shopping':
+                        iconClass = 'fas fa-shopping-cart';
+                        break;
+                    case 'transport':
+                        iconClass = 'fas fa-bus';
+                        break;
+                    case 'bills':
+                        iconClass = 'fas fa-file-invoice-dollar';
+                        break;
+                    case 'entertainment':
+                        iconClass = 'fas fa-gamepad';
+                        break;
+                    default:
+                        iconClass = 'fas fa-wallet';
+                }
+                
+                html += `
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <div class="transaction-date">
+                                <i class="fas fa-calendar"></i> ${formattedDate}
+                            </div>
+                            <div class="transaction-description">
+                                <i class="${iconClass}"></i> ${expense.description}
+                            </div>
+                        </div>
+                        <div class="transaction-amount">
+                            -${expense.amount.toLocaleString('vi-VN')} ₫
+                        </div>
+                    </div>
+                `;
+            });
+            
+            transactionsList.innerHTML = html;
+        }
+        
+        // Khởi tạo giao diện
+        updateUI();
+    </script>
+</body>
+</html>
